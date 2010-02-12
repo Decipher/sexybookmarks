@@ -1,0 +1,5 @@
+; $Id$
+name = SexyBookmarks
+description = Adds a fantastic looking, customizable social networking bookmark widget.
+core = 6.x
+dependencies[] = jquery_ui

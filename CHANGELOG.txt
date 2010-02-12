@@ -1,0 +1,7 @@
+// $Id$
+
+SexyBookmarks 6.x-1.x-dev, xxxx-xx-xx (development release)
+---------------------------------
+
+- Initial 6.x release.
+
