@@ -3,5 +3,11 @@
 SexyBookmarks 6.x-1.x-dev, xxxx-xx-xx (development release)
 ---------------------------------
 
+- Added 13 partial translations (ported).
+
+
+SexyBookmarks 6.x-1.0, 2010-02-12
+---------------------------------
+
 - Initial 6.x release.
 

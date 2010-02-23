@@ -218,7 +218,7 @@ function sexybookmarks_sexybookmarks() {
           '#type' => 'select',
           '#options' => array(
             'Technology' => t('Technology'),
-            'World &amp; Business' => t('World &amp; Business'),
+            'World &amp; Business' => t('World & Business'),
             'Science' => t('Science'),
             'Gaming' => t('Gaming'),
             'Lifestyle' => t('Lifestyle'),
@@ -229,7 +229,7 @@ function sexybookmarks_sexybookmarks() {
           ),
         ),
         'DEFAULT_TAGS' => array(
-          '#title' => 'Default tags',
+          '#title' => t('Default tags'),
           '#type' => 'textfield',
           '#description' => t('Enter a comma separated list of general tags which describe your site\'s posts as a whole. Try not to be too specific, as one post may fall into different *tag categories* than other posts.')
         ),

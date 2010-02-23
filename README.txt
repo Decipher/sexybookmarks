@@ -14,6 +14,15 @@ SexyBookmarks was written by Josh Jones
 - http://sexybookmarks.net
 
 
+Features
+-------------------
+
+* Support for more than 80 social bookmarking services.
+* Choice of 8 attractive background images.
+* Partial support for 13 additional languages.
+* Support for additional services and backgrounds defined in other modules.
+
+
 Required Modules
 -------------------
 

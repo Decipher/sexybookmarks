@@ -194,7 +194,7 @@ function sexybookmarks_admin($form_state) {
   // Buttons.
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Save configuration'),
+    '#value' => t('Save changes'),
   );
 
   return $form;
@@ -241,6 +241,7 @@ function sexybookmarks_admin_submit($form, &$form_state) {
   }
 
   // Save settings.
+  drupal_set_message(t('Your changes have been saved successfully!'));
   variable_set('sexybookmarks', serialize(array(
     'background' => $form_state['values']['backgrounds'],
     'bookmarks' => $form_state['values']['bookmarks'],
