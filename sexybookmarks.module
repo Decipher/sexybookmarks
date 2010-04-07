@@ -273,7 +273,7 @@ function _sexybookmarks_add_css($file) {
  * Implements hook_file_download().
  */
 function sexybookmarks_file_download($filepath) {
-  if ($filepath == 'css/sexybookmarks.css') {
+  if (strstr($filepath, 'css/sexybookmarks')) {
     header('Content-Type: text/css');
     readfile(file_directory_path() . '/'. $filepath);
     exit;
