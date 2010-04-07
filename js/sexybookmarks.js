@@ -4,7 +4,7 @@
   $(document).ready(function() {
     $('.sexybookmarks').hover(function() {
       $(this).animate(
-        { height: $('.sexybookmarks-inner').height() },
+        { height: $(this).find('.sexybookmarks-inner').height() },
         { duration: 400, queue: false}
       );
     }, function() {

@@ -49,21 +49,19 @@ function sexybookmarks_admin($form_state) {
     }
   }
 
-  // Bookmark sorting - requires jQuery UI.
-  if (module_exists('jquery_ui')) {
-    if (!empty($settings)) {
-      $sorted_bookmarks = array();
-      foreach ($settings['bookmarks'] as $key => $value) {
-        $sorted_bookmarks[$key] = $form['bookmarks'][$key];
-        unset($form['bookmarks'][$key]);
-      }
-      $form['bookmarks'] = array_merge($sorted_bookmarks, $form['bookmarks']);
+  // Bookmark sorting.
+  if (!empty($settings)) {
+    $sorted_bookmarks = array();
+    foreach ($settings['bookmarks'] as $key => $value) {
+      $sorted_bookmarks[$key] = $form['bookmarks'][$key];
+      unset($form['bookmarks'][$key]);
     }
-    $form['sort'] = array(
-      '#type' => 'hidden',
-      '#title' => 'sort',
-    );
+    $form['bookmarks'] = array_merge($sorted_bookmarks, $form['bookmarks']);
   }
+  $form['sort'] = array(
+    '#type' => 'hidden',
+    '#title' => 'sort',
+  );
 
   // Backgrounds settings.
   $form['backgrounds'] = array(
@@ -106,13 +104,13 @@ function sexybookmarks_admin($form_state) {
     '#default_value' => isset($settings['display']['types']) ? $settings['display']['types'] : array(),
   );
   $form['display']['location'] = array(
-    '#type' => 'radios',
+    '#type' => 'checkboxes',
     '#title' => t('Menu location (in relation to content)'),
     '#options' => array(
       'above' => t('Above content'),
       'below' => t('Below content'),
     ),
-    '#default_value' => isset($settings['display']['location']) ? $settings['display']['location'] : 'below',
+    '#default_value' => isset($settings['display']['location']) ? $settings['display']['location'] : array('below' => TRUE),
     '#attributes' => array(
       'class' => 'container-inline'
     ),
@@ -132,18 +130,6 @@ function sexybookmarks_admin($form_state) {
   $form['general'] = array(
     '#type' => 'fieldset',
     '#title' => t('General options'),
-  );
-  $form['general']['expand'] = array(
-    '#type' => 'radios',
-    '#title' => t('Animate-expand multi-lined bookmarks'),
-    '#options' => array(
-      1 => t('Yes'),
-      0 => t('No'),
-    ),
-    '#default_value' => isset($settings['general']['expand']) ? $settings['general']['expand'] : 1,
-    '#attributes' => array(
-      'class' => 'container-inline'
-    ),
   );
   $form['general']['nofollow'] = array(
     '#type' => 'radios',
@@ -165,6 +151,18 @@ function sexybookmarks_admin($form_state) {
       0 => t('No'),
     ),
     '#default_value' => isset($settings['general']['window']) ? $settings['general']['window'] : 1,
+    '#attributes' => array(
+      'class' => 'container-inline'
+    ),
+  );
+  $form['general']['expand'] = array(
+    '#type' => 'radios',
+    '#title' => t('Animate-expand multi-lined bookmarks'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#default_value' => isset($settings['general']['expand']) ? $settings['general']['expand'] : 1,
     '#attributes' => array(
       'class' => 'container-inline'
     ),

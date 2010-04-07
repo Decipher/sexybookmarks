@@ -11,3 +11,15 @@
 function sexybookmarks_uninstall() {
   variable_del('sexybookmarks');
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function sexybookmarks_update_6100() {
+  $settings = _sexybookmarks_get_settings();
+  if (!is_array($settings['display']['location'])) {
+    $settings['display']['location'] = array($settings['display']['location'] => $settings['display']['location']);
+  }
+  variable_set('sexybookmarks', serialize($settings));
+  return array();
+}

@@ -72,30 +72,74 @@ function sexybookmarks_nodeapi(&$node, $op, $teaser, $page) {
   switch ($op) {
     case 'view':
       $settings = _sexybookmarks_get_settings();
-      if ((($teaser && $settings['display']['node'] != 1) || ($page && $settings['display']['node'] != 0)) && $settings['display']['types'][$node->type] !== 0) {
-        // Add CSS.
-        _sexybookmarks_add_css(file_directory_path() . '/css/sexybookmarks.css');
-
-        // Add JavaScript.
-        if ($settings['general']['expand']) {
-          drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/js/sexybookmarks.js');
-        }
-
+      if (_sexybookmarks_display($settings, $node, array('teaser' => $teaser, 'page' => $page))) {
         // Calculate bookmarks weight.
         $weight = array(0, 0);
         foreach ($node->content as $item) {
-          $weight[0] = $item['#weight'] < $weight[0] ? $item['#weight'] : $weight[0];
-          $weight[1] = $item['#weight'] > $weight[1] ? $item['#weight'] : $weight[1];
+          if (isset($item['#weight'])) {
+            $weight[0] = $item['#weight'] < $weight[0] ? $item['#weight'] : $weight[0];
+            $weight[1] = $item['#weight'] > $weight[1] ? $item['#weight'] : $weight[1];
+          }
         }
 
         // Add bookmarks.
-        $node->content['sexybookmarks'] = array(
-          '#value' => theme('sexybookmarks', $node),
-          '#weight' => $settings['display']['location'] == 'above' ? $weight[0] - 10 : $weight[1] + 10,
-        );
+        foreach (array_filter($settings['display']['location']) as $position) {
+          $node->content['sexybookmarks_' . $position] = array(
+            '#value' => theme('sexybookmarks', $node),
+            '#weight' => $position == 'above' ? $weight[0] - 10 : $weight[1] + 10,
+          );
+        }
       }
       break;
   }
+}
+
+/**
+ * Implements hook_block().
+ */
+function sexybookmarks_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      return array(
+        array(
+          'info' => t('SexyBookmarks'),
+        ),
+      );
+
+    case 'view':
+      if (arg(0) == 'node' && is_numeric(arg(1))) {
+        $settings = _sexybookmarks_get_settings();
+        $node = node_load(arg(1));
+        if (_sexybookmarks_display($settings, $node, array('block' => TRUE))) {
+          return array('content' => theme('sexybookmarks', $node));
+        }
+      }
+      break;
+  }
+}
+
+function _sexybookmarks_display($settings, $node, $type) {
+  if ($settings['display']['types'][$node->type] !== 0) {
+    // Display in node.
+    if ((isset($settings['display']['location']['above']) && $settings['display']['location']['above'] != FALSE) || (isset($settings['display']['location']['below']) && $settings['display']['location']['below'] != FALSE)) {
+      // Display in teaser.
+      if (isset($type['teaser']) && $type['teaser'] && $settings['display']['node'] != 1) {
+        return TRUE;
+      }
+
+      // Display in page.
+      if (isset($type['page']) && $type['page'] && $settings['display']['node'] != 0) {
+        return TRUE;
+      }
+    }
+
+    // Display in block.
+    if (isset($type['block']) && $type['block']) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 /**
@@ -103,6 +147,15 @@ function sexybookmarks_nodeapi(&$node, $op, $teaser, $page) {
  */
 function sexybookmarks_preprocess_sexybookmarks(&$variables) {
   $variables['settings'] = _sexybookmarks_get_settings();
+
+  // Add CSS.
+  _sexybookmarks_add_css(file_directory_path() . '/css/sexybookmarks.css');
+
+  // Add JavaScript.
+  if ($variables['settings']['general']['expand']) {
+    drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/js/sexybookmarks.js');
+  }
+
   $bookmarks = module_invoke_all('sexybookmarks');
 
   // Replacement tokens.
@@ -127,8 +180,6 @@ function sexybookmarks_preprocess_sexybookmarks(&$variables) {
       }
     }
   }
-
-//{DEFAULT_TAGS}
 
   $variables['bookmarks'] = array();
   foreach (array_keys(array_filter($variables['settings']['bookmarks'])) as $key) {
@@ -164,39 +215,67 @@ function _sexybookmarks_get_settings() {
 }
 
 function _sexybookmarks_add_css($file) {
-  if (!file_exists($file)) {
-    $settings = _sexybookmarks_get_settings();
-    $bookmarks = module_invoke_all('sexybookmarks');
+  static $css_set = FALSE;
 
-    $info = pathinfo($file);
-    switch ($info['basename']) {
-      case 'sexybookmarks.css':
-        $settings['bookmarks'] = array_filter($settings['bookmarks']);
-        ksort($settings['bookmarks']);
-        foreach (array_keys($settings['bookmarks']) as $key) {
-          $bookmarks[$key]['icon'] = isset($bookmarks[$key]['icon']) ? url($bookmarks[$key]['icon']) : url(drupal_get_path('module', 'sexybookmarks') . '/images/icons/' . $key . '.png');
-          $settings['bookmarks'][$key] = $bookmarks[$key];
-        }
-        $output = theme('sexybookmarks_css', $settings);
-        break;
+  if ($css_set == FALSE) {
+    if (!file_exists($file)) {
+      $settings = _sexybookmarks_get_settings();
+      $bookmarks = module_invoke_all('sexybookmarks');
 
-      case 'sexybookmarks.admin.css':
-        ksort($bookmarks);
-        foreach (array_keys($bookmarks) as $key) {
-          $bookmarks[$key]['icon'] = isset($bookmarks[$key]['icon']) ? url($bookmarks[$key]['icon']) : url(drupal_get_path('module', 'sexybookmarks') . '/images/icons/' . $key . '.png');
-        }
-        $output = theme('sexybookmarks_admin_css', $bookmarks);
-        break;
+      $info = pathinfo($file);
+      switch ($info['basename']) {
+        case 'sexybookmarks.css':
+          $settings['bookmarks'] = array_filter($settings['bookmarks']);
+          ksort($settings['bookmarks']);
+          foreach (array_keys($settings['bookmarks']) as $key) {
+            $bookmarks[$key]['icon'] = isset($bookmarks[$key]['icon']) ? url($bookmarks[$key]['icon']) : url(drupal_get_path('module', 'sexybookmarks') . '/images/icons/' . $key . '.png');
+            $settings['bookmarks'][$key] = $bookmarks[$key];
+          }
+          $output = theme('sexybookmarks_css', $settings);
+          break;
+
+        case 'sexybookmarks.admin.css':
+          ksort($bookmarks);
+          foreach (array_keys($bookmarks) as $key) {
+            $bookmarks[$key]['icon'] = isset($bookmarks[$key]['icon']) ? url($bookmarks[$key]['icon']) : url(drupal_get_path('module', 'sexybookmarks') . '/images/icons/' . $key . '.png');
+          }
+          $output = theme('sexybookmarks_admin_css', $bookmarks);
+          break;
+      }
+
+      if (file_check_directory($path = file_directory_path() . '/css', TRUE)) {
+        file_save_data($output, $file);
+      }
+
+      else {
+        // ERROR
+      }
     }
 
-    if (file_check_directory($path = file_directory_path() . '/css', TRUE)) {
-      file_save_data($output, $file);
+    // Private filesystem.
+    if (variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC) == FILE_DOWNLOADS_PRIVATE) {
+      $file = str_replace(file_directory_path(), 'system/files', $file);
+
+      $output = '<link type="text/css" rel="stylesheet" media="all" href="' . base_path() . $file . '" />';
+      drupal_set_html_head($output);
     }
 
+    // Public filesystem.
     else {
-      // ERROR
+      drupal_add_css($file);
     }
-  }
 
-  drupal_add_css($file);
+    $css_set = TRUE;
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function sexybookmarks_file_download($filepath) {
+  if ($filepath == 'css/sexybookmarks.css') {
+    header('Content-Type: text/css');
+    readfile(file_directory_path() . '/'. $filepath);
+    exit;
+  }
 }
