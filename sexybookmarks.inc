@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Contains bookmark services and backgrounds for the SexyBookmarks module.

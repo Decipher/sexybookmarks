@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Theme for SexyBookmarks dynamic CSS.
@@ -15,7 +14,6 @@
  *   service.
  */
 ?>
-/* $Id$ */
 
 DIV.sexybookmarks
 {

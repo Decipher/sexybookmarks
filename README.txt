@@ -1,4 +1,3 @@
-// $Id$
 
 The SexyBookmarks module is a port of the WordPress plug-in by the same name.
 
