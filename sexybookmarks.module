@@ -17,6 +17,14 @@ foreach (module_list() as $module) {
 }
 
 /**
+ * Implements hook_flush_caches().
+ */
+function sexybookmarks_flush_caches() {
+  file_unmanaged_delete_recursive('public://sexybookmarks');
+  return array();
+}
+
+/**
  * Implements hook_theme().
  */
 function sexybookmarks_theme($existing, $type, $theme, $path) {
@@ -43,21 +51,24 @@ function sexybookmarks_theme($existing, $type, $theme, $path) {
  */
 function theme_sexybookmarks($variables) {
   if (($config = sexybookmarks_get_config($variables))) {
+    $directory = md5($config['service']);
     $settings = drupal_json_encode(array(
       "sexybookmarks-{$variables['profile']}" => array_merge(
         $config,
         array(
           'apikey' => SB_APIKEY,
+          'src' => file_create_url("public://sexybookmarks/{$directory}"),
           'link' => isset($variables['url']) ? $variables['url'] : '',
           'title' => isset($variables['title']) ? $variables['title'] : '',
           'notes' => isset($variables['text']) ? $variables['text'] : '',
+          'localize' => TRUE,
         )
       )
     ));
     drupal_add_js("SHRSB_Settings = {$settings};", 'inline');
-    drupal_add_js('http://www.shareaholic.com/media/js/jquery.shareaholic-publishers-sb.min.js', 'external');
-    //drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/jquery.shareaholic-publishers-sb.js');
-
+    drupal_add_js(sexybookmarks_get_file('http://www.shareaholic.com/media/js/jquery.shareaholic-publishers-sb.min.js'));
+    sexybookmarks_get_file('http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . urlencode($config['service']), "{$directory}/sprite.css");
+    sexybookmarks_get_file('http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&apitype=png&service=' . urlencode($config['service']), "{$directory}/sprite.png");
     return "<div class='sexybookmarks-{$variables['profile']}'></div>";
   }
   return '';
@@ -99,4 +110,29 @@ function sexybookmarks_get_config(&$variables) {
   drupal_alter('sexybookmarks_config', $config, $variables);
 
   return $config;
+}
+
+/**
+ *
+ */
+function sexybookmarks_get_file($url, $destination = NULL) {
+  $md5 = md5($url);
+  $pathinfo = pathinfo($url);
+  $destination = isset($destination) ? $destination : $pathinfo['basename'];
+  $file = "public://sexybookmarks/{$destination}";
+
+  if (!file_exists($file)) {
+    $request = drupal_http_request($url);
+    $pathinfo = pathinfo($file);
+    if ($request->code == 200) {
+      if (file_prepare_directory($dir = $pathinfo['dirname'], FILE_CREATE_DIRECTORY)) {
+        file_unmanaged_save_data($request->data, $file);
+      }
+    }
+
+    else {
+      return $url;
+    }
+  }
+  return $file;
 }

@@ -1,4 +1,15 @@
 name = SexyBookmarks
-description = Adds a fantastic looking, customizable social networking bookmark widget.
-core = 6.x
-dependencies[] = jquery_ui
+description = SexyBookmarks for Drupal
+configure = admin/config/content/sexybookmarks
+dependencies[] = ctools
+core = 7.x
+
+files[] = sexybookmarks.module
+files[] = includes/block.inc
+files[] = includes/ctools.inc
+files[] = includes/field.inc
+files[] = includes/link.inc
+files[] = includes/sexybookmarks.inc
+files[] = includes/shorten.inc
+files[] = includes/system.inc
+files[] = plugins/export_ui/sexybookmarks_profiles.inc

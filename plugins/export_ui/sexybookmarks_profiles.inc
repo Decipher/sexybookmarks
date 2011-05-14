@@ -231,19 +231,20 @@ function theme_sexybookmarks_services($variables) {
     1, 14, 21, 89, 98, 102, 106, 243, 267, 268, 277, 278, 283, 284, 285, 286, 288,
     20, 59, 92, 188, 190, 192, 204, 246, 263, 265, 279, 281, 282, 287, 290, 291, 292, 293, 294,
   );
+  $directory = md5(implode(',', $services));
 
   // Attach Javascript and Styles.
   $api = 'http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . implode(',', $services);
-  drupal_add_css($api, 'external');
-  drupal_add_css("
+  drupal_add_css(sexybookmarks_get_file($api, "{$directory}/sprite.css"));
+  drupal_add_css('
     li.shareaholic {
-      background-image: url('{$api}&apitype=png');
+      background-image: url("' . file_create_url(sexybookmarks_get_file("{$api}&apitype=png", "{$directory}/sprite.png")) . '");
     }
 
     div.shr-bookmarks ul.shr-socials li {
       cursor: move !important;
     }
-  ", 'inline');
+  ', 'inline');
   drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/scripts/sexybookmarks.admin.js');
   drupal_add_library('system', 'ui.sortable');
 
