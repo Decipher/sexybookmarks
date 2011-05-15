@@ -1,4 +1,3 @@
-
 The SexyBookmarks module is a port of the WordPress plug-in by the same name.
 
 The sole aim was to stray away from the "in the box" thinking behind most social
@@ -17,19 +16,16 @@ Features
 -------------------
 
 * Support for more than 80 social bookmarking services.
-* Choice of 8 attractive background images.
 * Partial support for 13 additional languages.
-* Support for additional services and backgrounds defined in other modules.
 
 
 Required Modules
 -------------------
 
-* jQuery UI - http://drupal.org/project/jquery_ui
+* Chaos Tools - http://drupal.org/project/ctools
 
 
 Recommended Modules
 -------------------
 
 * Shorten   - http://drupal.org/project/shorten
-
