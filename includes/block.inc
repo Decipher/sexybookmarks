@@ -23,19 +23,21 @@ function sexybookmarks_block_info() {
 function sexybookmarks_block_configure($delta) {
   switch ($delta) {
     case 'sexybookmarks':
+      $form = array();
+
       $options = array();
       ctools_include('export');
       foreach (ctools_export_crud_load_all('sexybookmarks_profiles') as $profile) {
-        $options[$profile->name] = $profile->name;
+        if (empty($profile->disabled)) {
+          $options[$profile->name] = $profile->name;
+        }
       }
-
-      $form = array();
-
       $form['profile'] = array(
         '#type' => 'select',
         '#title' => t('SexyBookmarks profile'),
+        '#empty_value' => '',
         '#options' => $options,
-        '#default_value' => variable_get('sexybookmarks_block_profile', 'default'),
+        '#default_value' => variable_get('sexybookmarks_block_profile', ''),
       );
 
       return $form;
@@ -66,7 +68,7 @@ function sexybookmarks_block_view($delta) {
           'content' => theme('sexybookmarks', array(
             'url' => url($node->uri['path'], array('absolute' => TRUE)),
             'title' => $node->title,
-            'profile' => variable_get('sexybookmarks_block_profile', 'default'),
+            'profile' => variable_get('sexybookmarks_block_profile', ''),
           ))
         );
       }
