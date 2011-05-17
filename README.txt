@@ -13,19 +13,19 @@ SexyBookmarks was written by Josh Jones
 
 
 Features
--------------------
+--------------------------------------------------------------------------------
 
 * Support for more than 80 social bookmarking services.
 * Partial support for 13 additional languages.
 
 
 Required Modules
--------------------
+--------------------------------------------------------------------------------
 
-* Chaos Tools - http://drupal.org/project/ctools
+* Chaos Tool suite - http://drupal.org/project/ctools
 
 
 Recommended Modules
--------------------
+--------------------------------------------------------------------------------
 
 * Shorten   - http://drupal.org/project/shorten

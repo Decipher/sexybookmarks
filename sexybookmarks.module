@@ -60,6 +60,7 @@ function theme_sexybookmarks($variables) {
   if (($config = sexybookmarks_get_config($variables))) {
     $id = "{$variables['profile']}-" . rand(1000, 9999);
     $directory = md5($config['service']);
+    $api = 'http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . urlencode($config['service']);
     $settings = drupal_json_encode(array(
       "sexybookmarks-{$id}" => array_merge(
         $config,
@@ -75,8 +76,12 @@ function theme_sexybookmarks($variables) {
     ));
     drupal_add_js("jQuery.extend(SHRSB_Settings, {$settings});", 'inline');
     drupal_add_js(sexybookmarks_get_file('http://www.shareaholic.com/media/js/jquery.shareaholic-publishers-sb.min.js'));
-    sexybookmarks_get_file('http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . urlencode($config['service']), "{$directory}/sprite.css");
-    sexybookmarks_get_file('http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&apitype=png&service=' . urlencode($config['service']), "{$directory}/sprite.png");
+    drupal_add_css(sexybookmarks_get_file($api, "{$directory}/sprite.css"), array('basename' => "{$directory}.css"));
+    drupal_add_css("
+      .sexybookmarks-{$id} ul.shr-socials li.shareaholic {
+        background-image: url('" . file_create_url(sexybookmarks_get_file("{$api}&apitype=png", "{$directory}/sprite.png")) . "') !important;
+      }
+    ", 'inline');
     return "<div class='sexybookmarks-{$id}'></div>";
   }
   return '';

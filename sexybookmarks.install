@@ -8,6 +8,8 @@
  * Implements hook_schema().
  */
 function sexybookmarks_schema() {
+  $schema = array();
+
   $schema['sexybookmarks_profiles'] = array(
     'export' => array(
       'key' => 'name',

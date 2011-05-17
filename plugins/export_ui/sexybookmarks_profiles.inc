@@ -11,7 +11,7 @@ $plugin = array(
     'menu prefix' => 'admin/config/content',
     'menu item' => 'sexybookmarks',
     'menu title' => 'SexyBookmarks',
-    'menu description' => 'Administer Mobile Codes profiles.',
+    'menu description' => 'Administer SexyBookmarks profiles.',
   ),
   'title singular' => t('profile'),
   'title singular proper' => t('Profile'),
@@ -26,6 +26,7 @@ $plugin = array(
  * SexyBookmarks profiles settings form.
  */
 function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
+  drupal_add_library('system', 'farbtastic');
   $config = $form_state['item']->config;
 
   $form['config'] = array(
