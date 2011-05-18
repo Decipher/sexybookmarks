@@ -42,7 +42,7 @@ function sexybookmarks_entity_view($entity, $type, $view_mode, $langcode) {
       '#markup' => theme('sexybookmarks', array(
         'url' => isset($entity->uri['path']) ? url($entity->uri['path'], array('absolute' => TRUE)) : '',
         'title' => isset($entity->title) ? $entity->title : '',
-        'profile' => 'default'
+        'profile' => $profile->name,
       )),
       '#weight' => 100,
     );

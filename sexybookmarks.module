@@ -68,7 +68,9 @@ function theme_sexybookmarks($variables) {
           'apikey' => SB_APIKEY,
           'src' => file_create_url("public://sexybookmarks/{$directory}"),
           'link' => isset($variables['url']) ? $variables['url'] : '',
-          'title' => isset($variables['title']) ? $variables['title'] : '',
+          'title' => isset($variables['title']) ? $variables['title'] : (
+            drupal_get_title() ? strip_tags(drupal_get_title()) : check_plain(variable_get('site_name', 'Drupal'))
+          ),
           'notes' => isset($variables['text']) ? $variables['text'] : '',
           'localize' => TRUE,
         )

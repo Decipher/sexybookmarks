@@ -61,16 +61,11 @@ function sexybookmarks_block_save($delta = 0, $edit = array()) {
 function sexybookmarks_block_view($delta) {
   switch ($delta) {
     case 'sexybookmarks':
-      if (arg(0) == 'node' && arg(1) != '' && arg(2) == '') {
-        $node = node_load(arg(1));
-        return array(
-          'subject' => t('SexyBookmarks'),
-          'content' => theme('sexybookmarks', array(
-            'url' => url($node->uri['path'], array('absolute' => TRUE)),
-            'title' => $node->title,
-            'profile' => variable_get('sexybookmarks_block_profile', ''),
-          ))
-        );
-      }
+      return array(
+        'subject' => t('SexyBookmarks'),
+        'content' => theme('sexybookmarks', array(
+          'profile' => variable_get('sexybookmarks_block_profile', ''),
+        ))
+      );
   }
 }
