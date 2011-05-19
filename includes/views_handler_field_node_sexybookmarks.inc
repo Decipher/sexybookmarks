@@ -15,7 +15,7 @@ class views_handler_field_node_sexybookmarks extends views_handler_field {
     $options = parent::option_definition();
 
     $options['profile'] = array(
-      'default' => '',
+      'default' => 'default',
       'translatable' => FALSE
     );
 

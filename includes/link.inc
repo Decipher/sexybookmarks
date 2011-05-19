@@ -12,7 +12,7 @@ function sexybookmarks_field_formatter_info() {
     'sexybookmarks' => array(
       'label' => t('SexyBookmarks'),
       'field types' => array('link_field'),
-      'settings' => array('sexybookmarks_profile' => ''),
+      'settings' => array('sexybookmarks_profile' => 'default'),
     ),
   );
 }
@@ -54,7 +54,7 @@ function sexybookmarks_field_formatter_settings_form($field, $instance, $view_mo
     '#title' => t('SexyBookmarks profile'),
     '#empty_value' => '',
     '#options' => $options,
-    '#default_value' => !empty($display['settings']['sexybookmarks_profile']) ? $display['settings']['sexybookmarks_profile'] : '',
+    '#default_value' => !empty($display['settings']['sexybookmarks_profile']) ? $display['settings']['sexybookmarks_profile'] : 'default',
   );
 
   return $element;

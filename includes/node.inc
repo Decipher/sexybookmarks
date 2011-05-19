@@ -32,7 +32,7 @@ function node_sexybookmarks_form_alter_alter(&$form, &$form_state, $form_id) {
       '#title' => t('Profile'),
       '#empty_value' => '',
       '#options' => $options,
-      '#default_value' => variable_get("node_sexybookmarks_profile_{$form['#node_type']->type}", ''),
+      '#default_value' => variable_get("node_sexybookmarks_profile_{$form['#node_type']->type}", 'default'),
     );
 
     $form['#submit'][] = 'sexybookmarks_node_type_form_submit';

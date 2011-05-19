@@ -18,7 +18,17 @@ Features
 --------------------------------------------------------------------------------
 
 * Support for more than 80 social bookmarking services.
-* Partial support for 13 additional languages.
+* Multiple configuration profiles - Features exportable.
+* Multiple display options:
+  * Psuedo field for the Node entity.
+  * Field formatter for the Link module.
+  * View module content field.
+  * Two (2) blocks:
+    * Current URL.
+    * Site URL.
+  * Drupal API Theme() function.
+* Support for:
+  * Shorten module.
 
 
 Required Modules
@@ -31,3 +41,25 @@ Recommended Modules
 --------------------------------------------------------------------------------
 
 * Shorten   - http://drupal.org/project/shorten
+
+
+Configuration
+--------------------------------------------------------------------------------
+
+* Setting up profiles:
+
+  Profiles can be managed at:
+    Administration > Configuration > Content authoring > SexyBookmarks
+    http://[www.yoursite.com/path/to/drupal]/admin/config/content/sexybookmarks
+
+
+* Displaying via Nodes (pseudo field):
+
+  The profile for each Node Content type can be set at:
+    Administration > Structure > Content types > [content type] > Edit
+    http://[www.yoursite.com/path/to/drupal]/admin/structure/types/manage/[content-type]
+
+  The position of the SexyBookmarks widget can be set at:
+    Administration > Structure > Content types > [content type] > Manage display > [view mode]
+    http://[www.yoursite.com/path/to/drupal]/admin/structure/types/manage/[content-type]/display/[view-mode]
+

@@ -9,8 +9,8 @@
  */
 function sexybookmarks_ctools_plugin_api() {
   list($module, $api) = func_get_args();
-  if ($module == "sexybookmarks" && $api == "default_sexybookmarks_profiles") {
-    return array("version" => 2);
+  if ($module == 'sexybookmarks' && $api == 'default_sexybookmarks_profiles') {
+    return array('version' => 2);
   }
 }
 

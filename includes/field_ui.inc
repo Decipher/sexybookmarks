@@ -13,7 +13,7 @@ function sexybookmarks_field_extra_fields() {
   ctools_include('export');
   foreach (field_info_bundles() as $entity => $bundles) {
     foreach (array_keys($bundles) as $bundle) {
-      $profile = ctools_export_crud_load('sexybookmarks_profiles', variable_get("{$entity}_sexybookmarks_profile_{$bundle}", ''));
+      $profile = ctools_export_crud_load('sexybookmarks_profiles', variable_get("{$entity}_sexybookmarks_profile_{$bundle}", 'default'));
       if (!empty($profile)) {
         $extra[$entity][$bundle] = array(
           'display' => array(
@@ -36,7 +36,7 @@ function sexybookmarks_field_extra_fields() {
  */
 function sexybookmarks_entity_view($entity, $type, $view_mode, $langcode) {
   ctools_include('export');
-  $profile = ctools_export_crud_load('sexybookmarks_profiles', variable_get("{$type}_sexybookmarks_profile_{$entity->content['#bundle']}", ''));
+  $profile = ctools_export_crud_load('sexybookmarks_profiles', variable_get("{$type}_sexybookmarks_profile_{$entity->content['#bundle']}", 'default'));
   if (!empty($profile)) {
     $entity->content['sexybookmarks'] = array(
       '#markup' => theme('sexybookmarks', array(

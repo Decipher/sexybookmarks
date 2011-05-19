@@ -27,8 +27,24 @@ function sexybookmarks_init() {
  * Implements hook_flush_caches().
  */
 function sexybookmarks_flush_caches() {
-  file_unmanaged_delete_recursive('public://sexybookmarks');
+  // Only flush cache if we can ping Shareaholic.
+  $request = drupal_http_request('http://www.shareaholic.com');
+  if ($request->code == 200) {
+    file_unmanaged_delete_recursive('public://sexybookmarks');
+  }
   return array();
+}
+
+/**
+ * Implements hook_permission().
+ */
+function sexybookmarks_permission() {
+  return array(
+    'administer sexybookmarks' => array(
+      'title' => t('Administer SexyBookmarks'),
+      'description' => t('Manage SexyBookmarks profiles.'),
+    ),
+  );
 }
 
 /**
@@ -121,6 +137,12 @@ function sexybookmarks_get_config(&$variables) {
     watchdog('sexybookmarks', 'No profile or configuration provided.', array(), WATCHDOG_ERROR);
   }
 
+  // Convert certain strings to boolean values.
+  $string_to_bool = array('fbLikeButton', 'dontShowShareCount', 'designer_toolTips', 'shrlink', 'expand');
+  foreach ($string_to_bool as $key) {
+    $config[$key] = (bool) $config[$key];
+  }
+
   // Allow other modules to alter configuration.
   drupal_alter('sexybookmarks_config', $config, $variables);
 
@@ -128,7 +150,7 @@ function sexybookmarks_get_config(&$variables) {
 }
 
 /**
- *
+ * Return cached version of request URL.
  */
 function sexybookmarks_get_file($url, $destination = NULL) {
   $md5 = md5($url);
