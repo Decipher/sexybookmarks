@@ -1,16 +1,6 @@
 name = SexyBookmarks
 description = SexyBookmarks for Drupal
-configure = admin/config/content/sexybookmarks
 dependencies[] = ctools
-core = 7.x
-
-files[] = sexybookmarks.module
-files[] = includes/block.inc
-files[] = includes/ctools.inc
-files[] = includes/field_ui.inc
-files[] = includes/link.inc
-files[] = includes/node.inc
-files[] = includes/sexybookmarks.inc
-files[] = includes/shorten.inc
-files[] = includes/system.inc
-files[] = plugins/export_ui/sexybookmarks_profiles.inc
+dependencies[] = jquery_ui
+dependencies[] = jquery_update
+core = 6.x

@@ -5,72 +5,84 @@
  */
 
 /**
- * Implements hook_block_info().
+ * Implements hook_block().
  */
+function sexybookmarks_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      return sexybookmarks_block_info();
+
+    case 'configure':
+      return sexybookmarks_block_configure($delta);
+
+    case 'save':
+      sexybookmarks_block_save($delta, $edit);
+
+    case 'view':
+      return sexybookmarks_block_view($delta);
+  }
+}
+
 function sexybookmarks_block_info() {
   $blocks = array();
 
-  $blocks['sexybookmarks'] = array(
-    'info' => t('SexyBookmarks'),
+  $blocks['current'] = array(
+    'info' => t('SexyBookmarks: Current URL'),
+  );
+
+  $blocks['site'] = array(
+    'info' => t('SexyBookmarks: Site URL'),
   );
 
   return $blocks;
 }
 
-/**
- * Implements hook_block_configure().
- */
 function sexybookmarks_block_configure($delta) {
-  switch ($delta) {
-    case 'sexybookmarks':
-      $form = array();
+  $form = array();
 
-      $options = array();
-      ctools_include('export');
-      foreach (ctools_export_crud_load_all('sexybookmarks_profiles') as $profile) {
-        if (empty($profile->disabled)) {
-          $options[$profile->name] = $profile->name;
-        }
-      }
-      $form['profile'] = array(
-        '#type' => 'select',
-        '#title' => t('SexyBookmarks profile'),
-        '#empty_value' => '',
-        '#options' => $options,
-        '#default_value' => variable_get('sexybookmarks_block_profile', ''),
-      );
-
-      return $form;
+  $options = array('' => '- None -');
+  ctools_include('export');
+  foreach (ctools_export_crud_load_all('sexybookmarks_profiles') as $profile) {
+    if (empty($profile->disabled)) {
+      $options[$profile->name] = $profile->name;
+    }
   }
+  $form['profile'] = array(
+    '#type' => 'select',
+    '#title' => t('SexyBookmarks profile'),
+    '#options' => $options,
+    '#default_value' => variable_get("sexybookmarks_block_{$delta}_profile", 'default'),
+  );
+
+  return $form;
 }
 
-/**
- * Implements hook_block_save().
- */
 function sexybookmarks_block_save($delta = 0, $edit = array()) {
-  switch ($delta) {
-    case 'sexybookmarks':
-      variable_set('sexybookmarks_block_profile', $edit['profile']);
-      break;
+  variable_set("sexybookmarks_block_{$delta}_profile", $edit['profile']);
+}
+
+function sexybookmarks_block_view($delta) {
+  if (function_exists($function = "sexybookmarks_block_{$delta}_view")) {
+    return $function();
   }
 }
 
-/**
- * Implements hook_block_view().
- */
-function sexybookmarks_block_view($delta) {
-  switch ($delta) {
-    case 'sexybookmarks':
-      if (arg(0) == 'node' && arg(1) != '' && arg(2) == '') {
-        $node = node_load(arg(1));
-        return array(
-          'subject' => t('SexyBookmarks'),
-          'content' => theme('sexybookmarks', array(
-            'url' => url($node->uri['path'], array('absolute' => TRUE)),
-            'title' => $node->title,
-            'profile' => variable_get('sexybookmarks_block_profile', ''),
-          ))
-        );
-      }
-  }
+function sexybookmarks_block_current_view() {
+  return array(
+    'subject' => t('SexyBookmarks'),
+    'content' => theme('sexybookmarks', array(
+      'profile' => variable_get('sexybookmarks_block_current_profile', 'default'),
+    ))
+  );
+}
+
+function sexybookmarks_block_site_view() {
+  return array(
+    'subject' => t('SexyBookmarks'),
+    'content' => theme('sexybookmarks', array(
+      'profile' => variable_get('sexybookmarks_block_site_profile', 'default'),
+      'url' => url(NULL, array('absolute' => TRUE)),
+      'title' => variable_get('site_name', 'Drupal'),
+    ))
+  );
 }

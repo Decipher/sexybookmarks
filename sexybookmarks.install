@@ -8,6 +8,8 @@
  * Implements hook_schema().
  */
 function sexybookmarks_schema() {
+  $schema = array();
+
   $schema['sexybookmarks_profiles'] = array(
     'export' => array(
       'key' => 'name',
@@ -46,3 +48,30 @@ function sexybookmarks_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_install().
+ */
+function sexybookmarks_install() {
+  drupal_install_schema('sexybookmarks');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sexybookmarks_uninstall() {
+  drupal_uninstall_schema('sexybookmarks');
+  //variable_del('sexybookmarks');
+}
+
+/**
+ * Implements hook_update_N().
+ */
+//function sexybookmarks_update_6100() {
+//  $settings = _sexybookmarks_get_settings();
+//  if (!is_array($settings['display']['location'])) {
+//    $settings['display']['location'] = array($settings['display']['location'] => $settings['display']['location']);
+//  }
+//  variable_set('sexybookmarks', serialize($settings));
+//  return array();
+//}

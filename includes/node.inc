@@ -20,7 +20,7 @@ function node_sexybookmarks_form_alter_alter(&$form, &$form_state, $form_id) {
       ),
     );
 
-    $options = array();
+    $options = array('' => '- None -');
     ctools_include('export');
     foreach (ctools_export_crud_load_all('sexybookmarks_profiles') as $profile) {
       if (empty($profile->disabled)) {
@@ -30,18 +30,26 @@ function node_sexybookmarks_form_alter_alter(&$form, &$form_state, $form_id) {
     $form['sexybookmarks']['node_sexybookmarks_profile'] = array(
       '#type' => 'select',
       '#title' => t('Profile'),
-      '#empty_value' => '',
       '#options' => $options,
-      '#default_value' => variable_get("node_sexybookmarks_profile_{$form['#node_type']->type}", ''),
+      '#default_value' => variable_get("node_sexybookmarks_profile_{$form['#node_type']->type}", 'default'),
     );
-
-    $form['#submit'][] = 'sexybookmarks_node_type_form_submit';
   }
 }
 
 /**
- * Submit callback; clear field cache.
+ * Implements hook_nodeapi().
  */
-function sexybookmarks_node_type_form_submit($form, &$form_state) {
-  field_cache_clear();
+function sexybookmarks_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'view':
+      $node->content['sexybookmarks'] = array(
+        '#weight' => module_exists('content') ? content_extra_field_weight($node->type, 'sexybookmarks') : 100,
+        '#value' => theme('sexybookmarks', array(
+          'profile' => variable_get("node_sexybookmarks_profile_{$node->type}", 'default'),
+          'url' => url("node/{$node->nid}", array('absolute' => TRUE)),
+          'title' => $node->title,
+        )),
+      );
+      break;
+  }
 }

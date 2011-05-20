@@ -8,10 +8,10 @@ $plugin = array(
   'schema' => 'sexybookmarks_profiles',
   'access' => 'administer sexybookmarks',
   'menu' => array(
-    'menu prefix' => 'admin/config/content',
+    'menu prefix' => 'admin/settings',
     'menu item' => 'sexybookmarks',
     'menu title' => 'SexyBookmarks',
-    'menu description' => 'Administer Mobile Codes profiles.',
+    'menu description' => 'Administer SexyBookmarks profiles.',
   ),
   'title singular' => t('profile'),
   'title singular proper' => t('Profile'),
@@ -19,6 +19,7 @@ $plugin = array(
   'title plural proper' => t('Profiles'),
   'form' => array(
     'settings' => 'sexybookmarks_profiles_export_ui_form',
+    'submit' => 'sexybookmarks_profiles_export_ui_form_submit',
   ),
 );
 
@@ -26,10 +27,13 @@ $plugin = array(
  * SexyBookmarks profiles settings form.
  */
 function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
-  $config = $form_state['item']->config;
+  ctools_include('dependent');
+  drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/scripts/sexybookmarks.admin.js');
+  drupal_add_css('misc/farbtastic/farbtastic.css', 'module', 'all', FALSE);
+  drupal_add_js('misc/farbtastic/farbtastic.js');
 
+  $config = $form_state['item']->config;
   $form['config'] = array(
-    '#type' => 'container',
     '#tree' => TRUE,
   );
 
@@ -39,51 +43,112 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
     '#theme' => 'sexybookmarks_services',
   );
 
-  // General settings.
+  // Functionality settings.
   $form['config']['settings'] = array(
     '#type' => 'fieldset',
-    '#title' => t('General settings'),
+    '#title' => t('Functionality settings'),
     '#tree' => FALSE,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  $form['config']['settings']['mode'] = array(
-    '#type' => 'select',
-    '#title' => t('Mode'),
+  $form['config']['settings']['fbLikeButton'] = array(
+    '#type' => 'radios',
+    '#title' => t('Include Facebook Like button?'),
     '#options' => array(
-      'inject' => t('Inject'),
-      'iframe' => t('iFrame'),
+      1 => t('Yes'),
+      0 => t('No'),
     ),
-    '#default_value' => isset($config['mode']) ? $config['mode'] : 'inject',
-    '#parents' => array('config', 'mode'),
+    '#default_value' => isset($config['fbLikeButton']) ? $config['fbLikeButton'] : 0,
+    '#parents' => array('config', 'fbLikeButton'),
   );
-  $form['config']['settings']['expand'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Should iFrame auto-expand?'),
-    '#default_value' => isset($config['expand']) ? $config['expand'] : TRUE,
-    '#states' => array(
-      'visible' => array(
-        'select[name="config[mode]"]' => array('value' => 'iframe'),
-      ),
+  $form['config']['settings']['fbButtonPos'] = array(
+    '#type' => 'select',
+    '#title' => t('Facebook Like button location'),
+    '#options' => array(
+      'bottom-left' => t('Bottom Left'),
+      'bottom-right' => t('Bottom Right'),
+      'top-left' => t('Top Left'),
+      'top-right' => t('Top Right'),
     ),
-    '#parents' => array('config', 'expand'),
+    '#default_value' => isset($config['fbButtonPos']) ? $config['fbButtonPos'] : 'bottom-right',
+    '#process' => array('ctools_dependent_process'),
+    '#dependency' => array('radio:config[fbLikeButton]' => array('1')),
+    '#parents' => array('config', 'fbButtonPos'),
   );
-  $form['config']['settings']['duration'] = array(
+  $form['config']['settings']['dontShowShareCount'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show Share counters'),
+    '#options' => array(
+      0 => t('Yes (recommended)'),
+      1 => t('No'),
+    ),
+    '#default_value' => isset($config['dontShowShareCount']) ? $config['dontShowShareCount'] : 0,
+    '#description' => t('For Facebook, Twitter, Google Buzz and Delicious'),
+    '#parents' => array('config', 'dontShowShareCount'),
+  );
+  $form['config']['settings']['designer_toolTips'] = array(
+    '#type' => 'radios',
+    '#title' => t('Use Designer Tooltips'),
+    '#options' => array(
+      1 => t('Yes (recommended)'),
+      0 => t('No'),
+    ),
+    '#default_value' => isset($config['designer_toolTips']) ? $config['designer_toolTips'] : 1,
+    '#parents' => array('config', 'designer_toolTips'),
+  );
+  $form['config']['settings']['tip_bg_color'] = array(
     '#type' => 'textfield',
-    '#title' => t('Transition time for iframe expansion'),
-    '#default_value' => isset($config['duration']) ? $config['duration'] : '400',
-    '#field_suffix' => t('ms'),
-    '#size' => 5,
-    '#states' => array(
-      'visible' => array(
-        'select[name="config[mode]"]' => array('value' => 'iframe'),
-      ),
+    '#title' => t('Background Color for Tooltips'),
+    '#size' => 7,
+    '#maxlength' => 7,
+    '#default_value' => isset($config['tip_bg_color']) ? $config['tip_bg_color'] : '#000000',
+    '#process' => array('ctools_dependent_process'),
+    '#dependency' => array('radio:config[designer_toolTips]' => array('1')),
+    '#parents' => array('config', 'tip_bg_color'),
+  );
+  $form['config']['settings']['tip_text_color'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Text Color for Tooltips'),
+    '#size' => 7,
+    '#maxlength' => 7,
+    '#default_value' => isset($config['tip_text_color']) ? $config['tip_text_color'] : '#FFFFFF',
+    '#process' => array('ctools_dependent_process'),
+    '#dependency' => array('radio:config[designer_toolTips]' => array('1')),
+    '#parents' => array('config', 'tip_text_color'),
+  );
+  $form['config']['settings']['rel'] = array(
+    '#type' => 'radios',
+    '#title' => t('Add Nofollow to Links'),
+    '#options' => array(
+      'nofollow' => t('Yes'),
+      '' => t('No'),
     ),
-    '#parents' => array('config', 'duration'),
+    '#default_value' => isset($config['rel']) ? $config['rel'] : 'nofollow',
+    '#parents' => array('config', 'rel'),
+  );
+  $form['config']['settings']['target'] = array(
+    '#type' => 'radios',
+    '#title' => t('Open Links in New Window'),
+    '#options' => array(
+      '_blank' => t('Yes'),
+      '_self' => t('No'),
+    ),
+    '#default_value' => isset($config['target']) ? $config['target'] : '_blank',
+    '#parents' => array('config', 'target'),
+  );
+  $form['config']['settings']['shrlink'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show Shareaholic Link'),
+    '#options' => array(
+      1 => t('Yes'),
+      0 => t('No'),
+    ),
+    '#default_value' => isset($config['shrlink']) ? $config['shrlink'] : 1,
+    '#parents' => array('config', 'shrlink'),
   );
   $form['config']['settings']['shortener'] = array(
     '#type' => 'select',
-    '#title' => t('URL Shortener'),
+    '#title' => t('Which URL Shortener'),
     '#empty_value' => 'none',
     '#options' => array(
       'bitly' => t('bit.ly'),
@@ -96,69 +161,6 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
     '#parents' => array('config', 'shortener'),
   );
 
-  // Appearance settings.
-  $form['config']['appearance'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Appearance settings'),
-    '#tree' => FALSE,
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['config']['appearance']['center'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Center the bookmarks?'),
-    '#default_value' => isset($config['center']) ? $config['center'] : FALSE,
-    '#states' => array(
-      'disabled' => array(
-        'input[name="config[spaced]"]' => array('checked' => TRUE),
-      ),
-    ),
-    '#parents' => array('config', 'center'),
-  );
-  $form['config']['appearance']['spaced'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Space the bookmarks evenly?'),
-    '#default_value' => isset($config['spaced']) ? $config['spaced'] : FALSE,
-    '#states' => array(
-      'disabled' => array(
-        'input[name="config[center]"]' => array('checked' => TRUE),
-      ),
-    ),
-    '#parents' => array('config', 'spaced'),
-  );
-  $form['config']['appearance']['designer_toolTips'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use Facebook style designer tooltips?'),
-    '#default_value' => isset($config['designer_toolTips']) ? $config['designer_toolTips'] : FALSE,
-    '#parents' => array('config', 'designer_toolTips'),
-  );
-  $form['config']['appearance']['tip_bg_color'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Tooltip background'),
-    '#size' => 7,
-    '#maxlength' => 7,
-    '#default_value' => isset($config['tip_bg_color']) ? $config['tip_bg_color'] : '#000000',
-    '#states' => array(
-      'invisible' => array(
-        'input[name="config[designer_toolTips]"]' => array('checked' => FALSE),
-      ),
-    ),
-    '#parents' => array('config', 'tip_bg_color'),
-  );
-  $form['config']['appearance']['tip_text_color'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Tooltip text'),
-    '#size' => 7,
-    '#maxlength' => 7,
-    '#default_value' => isset($config['tip_text_color']) ? $config['tip_text_color'] : '#FFFFFF',
-    '#states' => array(
-      'invisible' => array(
-        'input[name="config[designer_toolTips]"]' => array('checked' => FALSE),
-      ),
-    ),
-    '#parents' => array('config', 'tip_text_color'),
-  );
-
   // Twitter specific settings.
   $form['config']['twitter'] = array(
     '#type' => 'fieldset',
@@ -169,59 +171,64 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
   );
   $form['config']['twitter']['twitter_template'] = array(
     '#type' => 'textfield',
-    '#title' => t('Template'),
+    '#title' => t('Configure Custom Tweet Template'),
     '#default_value' => isset($config['twitter_template']) ? $config['twitter_template'] : '${title} - ${short_link} via @Shareaholic',
-    '#description' => '
-      <ul>
-        <li><strong>${title}</strong> - title of the page</li>
-        <li><strong>${link}</strong> - link to the page</li>
-        <li><strong>${short_link}</strong> - short link that you pass to the Share API</li>
-        <li><strong>${notes}</strong> - any text; usually a very short summary of the link or user selected text</li>
-      </ul>',
+    '#description' =>
+      '<strong>' . t('Configuration Instructions') . ':</strong><br />'
+      . '<em>' . t('Using the strings ${title} and ${short_link} you can fully customize your tweet output.') . '</em>'
+      . '<p>'
+      . '  <strong>' . t('Example Configurations') . ':</strong><br />'
+      . '  <em>' . t('${title} - ${short_link} (via @Shareaholic)') . '</em><br />'
+      . '  ' . t('or') . '<br />'
+      . '  <em>' . t('RT @Shareaholic: ${title} - ${short_link}') . '</em>'
+      . '</p>',
     '#parents' => array('config', 'twitter_template'),
   );
-  $form['config']['twitter']['twitter_overlay'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use overlay?'),
-    '#default_value' => isset($config['twitter_overlay']) ? $config['twitter_overlay'] : TRUE,
-    '#parents' => array('config', 'twitter_overlay'),
-  );
 
-  // Facebook specific settings.
-  $form['config']['facebook'] = array(
+  // Aesthetic settings.
+  $form['config']['aesthetics'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Facebook settings'),
+    '#title' => t('Aesthetic settings'),
     '#tree' => FALSE,
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  $form['config']['facebook']['fbLikeButton'] = array(
+  $form['config']['aesthetics']['expand'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show Facebook like button?'),
-    '#default_value' => isset($config['fbLikeButton']) ? $config['fbLikeButton'] : FALSE,
-    '#parents' => array('config', 'fbLikeButton'),
-  );
-  $form['config']['facebook']['fbButtonPos'] = array(
-    '#type' => 'select',
+    '#title' => t('Animate-expand multi-lined bookmarks'),
     '#options' => array(
-      'bottom-left' => t('Bottom Left'),
-      'bottom-right' => t('Bottom Right'),
-      'top-left' => t('Top Left'),
-      'top-right' => t('Top Right'),
+      1 => t('Yes'),
+      0 => t('No'),
     ),
-    '#default_value' => isset($config['fbButtonPos']) ? $config['fbButtonPos'] : 'bottom-right',
-    '#states' => array(
-      'invisible' => array(
-        'input[name="config[fbLikeButton]"]' => array('checked' => FALSE),
-      ),
+    '#default_value' => isset($config['expand']) ? $config['expand'] : 1,
+    '#parents' => array('config', 'expand'),
+  );
+  $form['config']['aesthetics']['positioning'] = array(
+    '#type' => 'radios',
+    '#title' => t('Auto-space/center the bookmarks?'),
+    '#options' => array(
+      'spaced' => t('Space'),
+      'center' => t('Center'),
+      'no' => t('No'),
     ),
-    '#parents' => array('config', 'fbButtonPos'),
+    '#default_value' => isset($config['spaced']) && $config['spaced'] ? 'spaced' : (
+      isset($config['center']) && $config['center'] ? 'center' : 'no'
+    ),
+    '#parents' => array('config', 'positioning'),
   );
 }
 
-function theme_sexybookmarks_services($variables) {
+/**
+ * SexyBookmarks profiles settings form; submit callback.
+ */
+function sexybookmarks_profiles_export_ui_form_submit(&$form, &$form_state) {
+  $form_state['values']['config']['center'] = $form_state['values']['config']['positioning'] == 'center';
+  $form_state['values']['config']['spaced'] = $form_state['values']['config']['positioning'] == 'spaced';
+  unset($form_state['values']['config']['positioning']);
+}
+
+function theme_sexybookmarks_services($form_element) {
   $output = '';
-  $form_element = $variables['form_element'];
 
   // List of SexyBookmarks services.
   $services = array(
@@ -236,35 +243,28 @@ function theme_sexybookmarks_services($variables) {
   // Attach Javascript and Styles.
   $api = 'http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . implode(',', $services);
   drupal_add_css(sexybookmarks_get_file($api, "{$directory}/sprite.css"));
-  drupal_add_css('
-    li.shareaholic {
-      background-image: url("' . file_create_url(sexybookmarks_get_file("{$api}&apitype=png", "{$directory}/sprite.png")) . '");
-    }
-
-    div.shr-bookmarks ul.shr-socials li {
-      cursor: move !important;
-    }
-  ', 'inline');
-  drupal_add_js(drupal_get_path('module', 'sexybookmarks') . '/scripts/sexybookmarks.admin.js');
-  drupal_add_library('system', 'ui.sortable');
+  $styles = '
+    background-image: url("' . file_create_url(sexybookmarks_get_file("{$api}&apitype=png", "{$directory}/sprite.png")) . '");
+    cursor: move !important;
+  ';
+  jquery_ui_add(array('ui.sortable'));
 
   // Active services list.
   $active = array();
   foreach (explode(',', $form_element['#default_value']) as $item) {
-    $active[] = array('data' => '', 'id' => "shr-{$item}", 'class' => array("shr-{$item}", 'shareaholic'));
+    $active[] = array('data' => '', 'id' => "shr-{$item}", 'class' => "shr-{$item} shareaholic", 'style' => $styles);
   }
-  $output .= '<div class="shr-bookmarks clearfix">' . theme('item_list', array('title' => t('Active services'), 'items' => $active, 'attributes' => array('id' => 'sexybookmarks-active', 'class' => array('shr-socials')))) . '</div>';
+  $output .= '<div class="shr-bookmarks clear-block">' . theme('item_list', $active, t('Active services'), 'ul', array('id' => 'sexybookmarks-active', 'class' => 'shr-socials')) . '</div>';
 
   // Inactive services list.
   $inactive = array();
   foreach (array_diff($services, explode(',', $form_element['#default_value'])) as $item) {
-    $inactive[] = array('data' => '', 'id' => "shr-{$item}", 'class' => array("shr-{$item}", 'shareaholic'));
+    $inactive[] = array('data' => '', 'id' => "shr-{$item}", 'class' => "shr-{$item} shareaholic", 'style' => $styles);
   }
-  $output .= '<div class="shr-bookmarks clearfix">' . theme('item_list', array('title' => t('Inactive services'), 'items' => $inactive, 'attributes' => array('id' => 'sexybookmarks-inactive', 'class' => array('shr-socials')))) . '</div>';
+  $output .= '<div class="shr-bookmarks clear-block">' . theme('item_list', $inactive, t('Inactive services'), 'ul', array('id' => 'sexybookmarks-inactive', 'class' => 'shr-socials')) . '</div>';
 
   // Hidden field.
-  element_set_attributes($form_element, array('id', 'name', 'value', 'size', 'maxlength'));
-  $output .= theme('hidden', array('element' => $form_element));
+  $output .= theme('hidden', $form_element);
 
   return $output;
 }

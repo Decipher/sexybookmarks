@@ -1,31 +1,71 @@
-The SexyBookmarks module is a port of the WordPress plug-in by the same name.
+The SexyBookmarks for Drupal module is a port of the WordPress plug-in by the
+same name.
 
 The sole aim was to stray away from the "in the box" thinking behind most social
 bookmarking plugins, and add a little flair that would entice your readers,
 rather than deterring them with microscopic icons that get lost in pages heavy
 laden with content.
 
-SexyBookmarks was ported and is maintained by Stuart Clark (deciphered).
+SexyBookmarks for Drupal was ported and is maintained by Stuart Clark
+(deciphered).
 - http://stuar.tc/lark
 
-SexyBookmarks was written by Josh Jones
-- http://sexybookmarks.net
+SexyBookmarks is owned and operated by Shareaholic.
+- http://sexybookmarks.shareaholic.com/
 
 
 Features
--------------------
+--------------------------------------------------------------------------------
 
 * Support for more than 80 social bookmarking services.
-* Partial support for 13 additional languages.
+* Multiple configuration profiles - Features exportable.
+* Multiple display options:
+  * Psuedo field for Nodes.
+  * CCK/Views formatters:
+    * Link module.
+    * Node Reference module.
+    * plus an example Custom Formatter for extended support.
+  * View module content field.
+  * Two (2) blocks:
+    * Current URL.
+    * Site URL.
+  * Drupal API Theme() function.
+* Support for:
+  * Formatter Settings module.
+  * Shorten module.
 
 
 Required Modules
--------------------
+--------------------------------------------------------------------------------
 
-* Chaos Tools - http://drupal.org/project/ctools
+* Chaos Tool suite - http://drupal.org/project/ctools
+* jQuery UI - http://drupal.org/project/jquery_ui
+* jQuery Update - http://drupal.org/project/jquery_update
 
 
 Recommended Modules
--------------------
+--------------------------------------------------------------------------------
 
-* Shorten   - http://drupal.org/project/shorten
+* Formatter Settings - http://drupal.org/project/formatter_settings
+* Shorten - http://drupal.org/project/shorten
+
+
+Configuration
+--------------------------------------------------------------------------------
+
+* Setting up profiles:
+
+  Profiles can be managed at:
+    Administer > Site configuration > SexyBookmarks
+    http://[www.yoursite.com/path/to/drupal]/admin/settings/sexybookmarks
+
+
+* Displaying via Nodes (pseudo field):
+
+  The profile for each Content type can be set at:
+    Administer > Content management > [content type] > Edit
+    http://[www.yoursite.com/path/to/drupal]/admin/content/node-type/[content-type]
+
+  The position of the SexyBookmarks widget can be set at:
+    Administer > Content management > [content type] > Manage fields
+    http://[www.yoursite.com/path/to/drupal]/admin/content/node-type/[content-type]/fields
