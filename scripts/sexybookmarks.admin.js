@@ -18,7 +18,7 @@
       }).disableSelection();
 
       // Farbtastic color picker.
-      $('.form-item-config-designer-toolTips').append('<div id="placeholder" style="float: right;"></div>');
+      $('#edit-config-tip-bg-color').parent().append('<div id="placeholder" style="float: right; position: relative; z-index: 10;"></div>');
       var farb = $.farbtastic('#placeholder');
       $('#edit-config-tip-bg-color, #edit-config-tip-text-color').each(function() {
         farb.linkTo(this);
@@ -26,9 +26,6 @@
           farb.linkTo(this);
         });
       });
-      $('#edit-config-designer-tooltips').change(function() {
-        this.checked ? $('#placeholder').show() : $('#placeholder').hide();
-      }).trigger('change');
     }
   };
 })(jQuery);

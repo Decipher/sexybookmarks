@@ -48,3 +48,12 @@ function sexybookmarks_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function sexybookmarks_uninstall() {
+  db_delete('variable')
+    ->condition('name', '%' . db_like('sexybookmarks') . '%', 'LIKE')
+    ->execute();
+}

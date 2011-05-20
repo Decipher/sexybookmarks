@@ -20,8 +20,10 @@ Features
 * Support for more than 80 social bookmarking services.
 * Multiple configuration profiles - Features exportable.
 * Multiple display options:
-  * Psuedo field for the Node entity.
-  * Field formatter for the Link module.
+  * Psuedo field for Nodes.
+  * Field/Views formatters:
+    * Link module.
+    * Node Reference module.
   * View module content field.
   * Two (2) blocks:
     * Current URL.
@@ -40,7 +42,7 @@ Required Modules
 Recommended Modules
 --------------------------------------------------------------------------------
 
-* Shorten   - http://drupal.org/project/shorten
+* Shorten - http://drupal.org/project/shorten
 
 
 Configuration
@@ -55,11 +57,10 @@ Configuration
 
 * Displaying via Nodes (pseudo field):
 
-  The profile for each Node Content type can be set at:
+  The profile for each Content type can be set at:
     Administration > Structure > Content types > [content type] > Edit
     http://[www.yoursite.com/path/to/drupal]/admin/structure/types/manage/[content-type]
 
   The position of the SexyBookmarks widget can be set at:
     Administration > Structure > Content types > [content type] > Manage display > [view mode]
     http://[www.yoursite.com/path/to/drupal]/admin/structure/types/manage/[content-type]/display/[view-mode]
-

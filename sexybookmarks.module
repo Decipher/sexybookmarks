@@ -51,22 +51,25 @@ function sexybookmarks_permission() {
  * Implements hook_theme().
  */
 function sexybookmarks_theme($existing, $type, $theme, $path) {
-  return array(
-    'sexybookmarks' => array(
-      'variables' => array(
-        'url' => NULL,
-        'title' => NULL,
-        'text' => NULL,
-        'profile' => NULL,
-        'config' => NULL,
-      ),
-    ),
-    'sexybookmarks_services' => array(
-      'render element' => 'form_element',
-      'file' => 'sexybookmarks_profiles.inc',
-      'path' => drupal_get_path('module', 'sexybookmarks') . '/plugins/export_ui'
+  $items = array();
+
+  $items['sexybookmarks'] = array(
+    'variables' => array(
+      'url' => NULL,
+      'title' => NULL,
+      'text' => NULL,
+      'profile' => NULL,
+      'config' => NULL,
     ),
   );
+
+  $items['sexybookmarks_services'] = array(
+    'render element' => 'form_element',
+    'file' => 'sexybookmarks_profiles.inc',
+    'path' => drupal_get_path('module', 'sexybookmarks') . '/plugins/export_ui'
+  );
+
+  return $items;
 }
 
 /**
