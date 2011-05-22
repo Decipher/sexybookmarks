@@ -7,7 +7,7 @@
 /**
  * Implements hook_sexybookmarks_form_alter_alter() on behalf of node.module.
  */
-function node_sexybookmarks_form_alter_alter(&$form, &$form_state, $form_id) {
+function node_sexybookmarks_form_alter_alter($form, $form_state, $form_id) {
   if ($form_id == 'node_type_form') {
     $form['sexybookmarks'] = array(
       '#type' => 'fieldset',

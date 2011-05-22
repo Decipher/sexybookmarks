@@ -5,6 +5,13 @@
  */
 
 /**
+ * Implements hook_init().
+ */
+function sexybookmarks_init() {
+  module_invoke_all('sexybookmarks_init');
+}
+
+/**
  * Implements hook_theme().
  */
 function sexybookmarks_theme() {

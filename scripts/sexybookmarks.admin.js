@@ -17,7 +17,7 @@
     }).disableSelection();
 
     // Farbtastic color picker.
-    $('#edit-config-tip-bg-color-wrapper').prev().before('<div id="placeholder" style="float: right; position: relative; z-index: 10;"></div>');
+    $('#edit-config-tip-bg-color').parent().append('<div id="placeholder" style="float: right; position: relative; z-index: 10;"></div>');
     var farb = $.farbtastic('#placeholder');
     $('#edit-config-tip-bg-color, #edit-config-tip-text-color').each(function() {
       farb.linkTo(this);

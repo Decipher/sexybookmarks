@@ -32,7 +32,7 @@ Features
   * Drupal API Theme() function.
 * Support for:
   * Formatter Settings module.
-  * Shorten module.
+  * Shorten URLs module.
 
 
 Required Modules
@@ -47,7 +47,7 @@ Recommended Modules
 --------------------------------------------------------------------------------
 
 * Formatter Settings - http://drupal.org/project/formatter_settings
-* Shorten - http://drupal.org/project/shorten
+* Shorten URLs - http://drupal.org/project/shorten
 
 
 Configuration

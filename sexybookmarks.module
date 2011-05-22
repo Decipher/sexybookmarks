@@ -17,9 +17,9 @@ foreach (module_list() as $module) {
 }
 
 /**
- * Implements hook_init().
+ * Implements hook_sexybookmarks_init().
  */
-function sexybookmarks_init() {
+function sexybookmarks_sexybookmarks_init() {
   drupal_add_js('SHRSB_Settings = {};', 'inline');
 }
 
@@ -46,7 +46,7 @@ function _sexybookmarks_recursive_delete($directory) {
     foreach (array_diff(scandir($directory), array('.', '..')) as $file) {
       $file = "{$directory}/{$file}";
       if (is_dir($file)) {
-        _mobile_codes_recursive_delete($file);
+        _sexybookmarks_recursive_delete($file);
         @rmdir($file);
       }
       else {
@@ -120,7 +120,7 @@ function theme_sexybookmarks($variables) {
 function sexybookmarks_get_config(&$variables) {
   $config = NULL;
 
-  if (isset($variables['profile'])) {
+  if (!empty($variables['profile'])) {
     ctools_include('export');
     if (($profile = ctools_export_crud_load('sexybookmarks_profiles', $variables['profile']))) {
       if (empty($profile->disabled)) {
