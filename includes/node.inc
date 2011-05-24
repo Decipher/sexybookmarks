@@ -14,10 +14,6 @@ function node_sexybookmarks_form_alter_alter($form, $form_state, $form_id) {
       '#title' => t('SexyBookmarks settings'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#group' => 'additional_settings',
-      '#attached' => array(
-        'js' => array(drupal_get_path('module', 'sexybookmarks') . '/scripts/node.js'),
-      ),
     );
 
     $options = array('' => '- None -');
@@ -33,6 +29,18 @@ function node_sexybookmarks_form_alter_alter($form, $form_state, $form_id) {
       '#options' => $options,
       '#default_value' => variable_get("node_sexybookmarks_profile_{$form['#node_type']->type}", 'default'),
     );
+
+    $form['sexybookmarks']['node_sexybookmarks_display'] = array(
+      '#type' => 'select',
+      '#title' => t('Display on'),
+      '#options' => array(
+        '- None -',
+        'Teaser only',
+        'Full node only',
+        'Teaser and full node'
+      ),
+      '#default_value' => variable_get("node_sexybookmarks_display_{$form['#node_type']->type}", 3),
+    );
   }
 }
 
@@ -42,14 +50,17 @@ function node_sexybookmarks_form_alter_alter($form, $form_state, $form_id) {
 function sexybookmarks_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   switch ($op) {
     case 'view':
-      $node->content['sexybookmarks'] = array(
-        '#weight' => module_exists('content') ? content_extra_field_weight($node->type, 'sexybookmarks') : 100,
-        '#value' => theme('sexybookmarks', array(
-          'profile' => variable_get("node_sexybookmarks_profile_{$node->type}", 'default'),
-          'url' => url("node/{$node->nid}", array('absolute' => TRUE)),
-          'title' => $node->title,
-        )),
-      );
+      $display_mode = variable_get("node_sexybookmarks_display_{$node->type}", 3);
+      if (($a3 == 0 && $display_mode & 2) || ($a3 == 1 && $display_mode & 1)) {
+        $node->content['sexybookmarks'] = array(
+          '#weight' => module_exists('content') ? content_extra_field_weight($node->type, 'sexybookmarks') : 100,
+          '#value' => theme('sexybookmarks', array(
+            'profile' => variable_get("node_sexybookmarks_profile_{$node->type}", 'default'),
+            'url' => url("node/{$node->nid}", array('absolute' => TRUE)),
+            'title' => $node->title,
+          )),
+        );
+      }
       break;
   }
 }

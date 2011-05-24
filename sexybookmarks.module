@@ -20,6 +20,10 @@ foreach (module_list() as $module) {
  * Implements hook_sexybookmarks_init().
  */
 function sexybookmarks_sexybookmarks_init() {
+  $globals = array(
+    'perfoption' => '0',
+  );
+  drupal_add_js('SHRSB_Globals = ' . drupal_to_js($globals) . ';', 'inline');
   drupal_add_js('SHRSB_Settings = {};', 'inline');
 }
 
@@ -87,7 +91,7 @@ function sexybookmarks_sexybookmarks_theme_alter($items) {
  */
 function theme_sexybookmarks($variables) {
   if (($config = sexybookmarks_get_config($variables))) {
-    $id = "{$variables['profile']}-" . rand(1000, 9999);
+    $id = isset($variables['id']) ? $variables['id'] : "{$variables['profile']}-" . rand(1000, 9999);
     $directory = md5($config['service']);
     $api = 'http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . urlencode($config['service']);
     $settings = drupal_to_js(array(
@@ -149,11 +153,13 @@ function sexybookmarks_get_config(&$variables) {
   // Convert certain strings to boolean values.
   $string_to_bool = array('fbLikeButton', 'dontShowShareCount', 'designer_toolTips', 'shrlink', 'expand');
   foreach ($string_to_bool as $key) {
-    $config[$key] = (bool) $config[$key];
+    if (isset($config[$key])) {
+      $config[$key] = (bool) $config[$key];
+    }
   }
 
   // Allow other modules to alter configuration.
-  drupal_alter('sexybookmarks_config', $config, $variables);
+  drupal_alter('sexybookmarks_config', $config, array(&$variables));
 
   return $config;
 }
