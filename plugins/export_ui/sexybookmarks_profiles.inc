@@ -51,7 +51,7 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
   );
   $form['config']['settings']['fbLikeButton'] = array(
     '#type' => 'radios',
-    '#title' => t('Include Facebook Like button?'),
+    '#title' => t('Include Facebook Like button'),
     '#options' => array(
       1 => t('Yes'),
       0 => t('No'),
@@ -201,7 +201,7 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
     '#collapsed' => TRUE,
   );
   $form['config']['aesthetics']['expand'] = array(
-    '#type' => 'checkbox',
+    '#type' => 'radios',
     '#title' => t('Animate-expand multi-lined bookmarks'),
     '#options' => array(
       1 => t('Yes'),
@@ -212,7 +212,7 @@ function sexybookmarks_profiles_export_ui_form(&$form, &$form_state) {
   );
   $form['config']['aesthetics']['positioning'] = array(
     '#type' => 'radios',
-    '#title' => t('Auto-space/center the bookmarks?'),
+    '#title' => t('Auto-space/center the bookmarks'),
     '#options' => array(
       'spaced' => t('Space'),
       'center' => t('Center'),

@@ -30,7 +30,8 @@ Features
     * Site URL.
   * Drupal API Theme() function.
 * Support for:
-  * Shorten module.
+  * Page Title module.
+  * Shorten URLs module.
 
 
 Required Modules
@@ -42,7 +43,7 @@ Required Modules
 Recommended Modules
 --------------------------------------------------------------------------------
 
-* Shorten - http://drupal.org/project/shorten
+* Shorten URLs - http://drupal.org/project/shorten
 
 
 Configuration

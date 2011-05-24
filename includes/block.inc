@@ -62,21 +62,27 @@ function sexybookmarks_block_view($delta) {
 }
 
 function sexybookmarks_block_current_view() {
-  return array(
-    'subject' => t('SexyBookmarks'),
-    'content' => theme('sexybookmarks', array(
-      'profile' => variable_get('sexybookmarks_block_current_profile', 'default'),
-    ))
-  );
+  $profile = variable_get('sexybookmarks_block_current_profile', 'default');
+  if (!empty($profile)) {
+    return array(
+      'subject' => t('SexyBookmarks'),
+      'content' => theme('sexybookmarks', array(
+        'profile' => $profile,
+      ))
+    );
+  }
 }
 
 function sexybookmarks_block_site_view() {
-  return array(
-    'subject' => t('SexyBookmarks'),
-    'content' => theme('sexybookmarks', array(
-      'profile' => variable_get('sexybookmarks_block_site_profile', 'default'),
-      'url' => url(NULL, array('absolute' => TRUE)),
-      'title' => variable_get('site_name', 'Drupal'),
-    ))
-  );
+  $profile = variable_get('sexybookmarks_block_site_profile', 'default');
+  if (!empty($profile)) {
+    return array(
+      'subject' => t('SexyBookmarks'),
+      'content' => theme('sexybookmarks', array(
+        'profile' => $profile,
+        'url' => url(NULL, array('absolute' => TRUE)),
+        'title' => variable_get('site_name', 'Drupal'),
+      ))
+    );
+  }
 }

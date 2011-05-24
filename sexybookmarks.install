@@ -57,3 +57,42 @@ function sexybookmarks_uninstall() {
     ->condition('name', '%' . db_like('sexybookmarks') . '%', 'LIKE')
     ->execute();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function sexybookmarks_update_6100(&$sandbox) {
+  $settings = _sexybookmarks_get_settings();
+  if (!is_array($settings['display']['location'])) {
+    $settings['display']['location'] = array($settings['display']['location'] => $settings['display']['location']);
+  }
+  variable_set('sexybookmarks', serialize($settings));
+  return t('Updated SexyBookmarks settings.');
+}
+
+function sexybookmarks_update_6200(&$sandbox) {
+  db_create_table('sexybookmarks_profiles', array(
+    'fields' => array(
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => '', // @TODO
+      ),
+      'config' => array(
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+        'description' => '', // @TODO
+      ),
+    ),
+    'unique keys' => array(
+      'name' => array('name')
+    ),
+    'primary key' => array('name'),
+  ));
+  variable_del('sexybookmarks');
+  return t('Added SexyBookmarks profile table.');
+}

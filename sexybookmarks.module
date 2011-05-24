@@ -114,7 +114,7 @@ function theme_sexybookmarks($variables) {
 function sexybookmarks_get_config(&$variables) {
   $config = NULL;
 
-  if (isset($variables['profile'])) {
+  if (!empty($variables['profile'])) {
     ctools_include('export');
     if (($profile = ctools_export_crud_load('sexybookmarks_profiles', $variables['profile']))) {
       if (empty($profile->disabled)) {
@@ -143,7 +143,9 @@ function sexybookmarks_get_config(&$variables) {
   // Convert certain strings to boolean values.
   $string_to_bool = array('fbLikeButton', 'dontShowShareCount', 'designer_toolTips', 'shrlink', 'expand');
   foreach ($string_to_bool as $key) {
-    $config[$key] = (bool) $config[$key];
+    if (isset($config[$key])) {
+      $config[$key] = (bool) $config[$key];
+    }
   }
 
   // Allow other modules to alter configuration.
