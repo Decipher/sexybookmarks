@@ -20,6 +20,10 @@ foreach (module_list() as $module) {
  * Implements hook_init().
  */
 function sexybookmarks_init() {
+  $globals = array(
+    'perfoption' => '0',
+  );
+  drupal_add_js('SHRSB_Globals = ' . drupal_json_encode($globals) . ';', 'inline');
   drupal_add_js('SHRSB_Settings = {};', 'inline');
 }
 
@@ -55,6 +59,7 @@ function sexybookmarks_theme($existing, $type, $theme, $path) {
 
   $items['sexybookmarks'] = array(
     'variables' => array(
+      'id' => NULL,
       'url' => NULL,
       'title' => NULL,
       'text' => NULL,
@@ -77,7 +82,7 @@ function sexybookmarks_theme($existing, $type, $theme, $path) {
  */
 function theme_sexybookmarks($variables) {
   if (($config = sexybookmarks_get_config($variables))) {
-    $id = "{$variables['profile']}-" . rand(1000, 9999);
+    $id = isset($variables['id']) ? $variables['id'] : "{$variables['profile']}-" . rand(1000, 9999);
     $directory = md5($config['service']);
     $api = 'http://www.shareaholic.com/api/sprite/?v=2&apikey=' . SB_APIKEY . '&service=' . urlencode($config['service']);
     $settings = drupal_json_encode(array(

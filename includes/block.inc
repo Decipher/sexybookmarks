@@ -68,6 +68,7 @@ function sexybookmarks_block_current_view() {
       'subject' => t('SexyBookmarks'),
       'content' => theme('sexybookmarks', array(
         'profile' => $profile,
+        'id' => 'block-sexybookmarks-current',
       ))
     );
   }
@@ -82,6 +83,7 @@ function sexybookmarks_block_site_view() {
         'profile' => $profile,
         'url' => url(NULL, array('absolute' => TRUE)),
         'title' => variable_get('site_name', 'Drupal'),
+        'id' => 'block-sexybookmarks-site',
       ))
     );
   }

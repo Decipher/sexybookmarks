@@ -20,14 +20,15 @@ Features
 * Support for more than 80 social bookmarking services.
 * Multiple configuration profiles - Features exportable.
 * Multiple display options:
-  * Psuedo field for Nodes.
+  * Node item/Psuedo field for Nodes.
   * Field/Views formatters:
     * Link module.
     * Node Reference module.
-  * View module content field.
-  * Two (2) blocks:
+  * Views module content field.
+  * Blocks:
     * Current URL.
     * Site URL.
+    * plus an example Boxes block for extended support.
   * Drupal API Theme() function.
 * Support for:
   * Page Title module.
