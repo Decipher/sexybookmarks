@@ -29,7 +29,7 @@ Features
     * Current URL.
     * Site URL.
     * plus an example Boxes block for extended support.
-  * Drupal API Theme() function.
+  * Drupal API theme() function.
 * Support for:
   * Page Title module.
   * Shorten URLs module.
@@ -66,3 +66,11 @@ Configuration
   The position of the SexyBookmarks widget can be set at:
     Administration > Structure > Content types > [content type] > Manage display > [view mode]
     http://[www.yoursite.com/path/to/drupal]/admin/structure/types/manage/[content-type]/display/[view-mode]
+
+
+Help
+--------------------------------------------------------------------------------
+
+More help can be found via the Help module:
+  Administration > Help > sexybookmarks
+  http://[www.yoursite.com/path/to/drupal]/admin/help/sexybookmarks

@@ -12,10 +12,12 @@ function sexybookmarks_block_info() {
 
   $blocks['current'] = array(
     'info' => t('SexyBookmarks: Current URL'),
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   $blocks['site'] = array(
     'info' => t('SexyBookmarks: Site URL'),
+    'cache' => DRUPAL_NO_CACHE,
   );
 
   return $blocks;

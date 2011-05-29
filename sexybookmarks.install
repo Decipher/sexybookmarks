@@ -96,3 +96,14 @@ function sexybookmarks_update_6200(&$sandbox) {
   variable_del('sexybookmarks');
   return t('Added SexyBookmarks profile table.');
 }
+
+function sexybookmarks_update_7200() {
+  db_update('block')
+    ->fields(array(
+      'cache' => -1,
+    ))
+    ->condition('module', 'sexybookmarks')
+    ->execute();
+
+  return t('Updated Block cache value.');
+}
