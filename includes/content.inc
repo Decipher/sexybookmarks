@@ -54,6 +54,10 @@ function theme_sexybookmarks_formatter_sexybookmarks($element) {
  * Implements hook_content_extra_fields().
  */
 function sexybookmarks_content_extra_fields($type_name) {
+  if (!module_exists('ctools')) {
+    return;
+  }
+
   ctools_include('export');
   $profile = ctools_export_crud_load('sexybookmarks_profiles', variable_get("node_sexybookmarks_profile_{$type_name}", 'default'));
   if (!empty($profile)) {

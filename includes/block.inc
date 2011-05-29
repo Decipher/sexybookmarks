@@ -28,16 +28,22 @@ function sexybookmarks_block_info() {
 
   $blocks['current'] = array(
     'info' => t('SexyBookmarks: Current URL'),
+    'cache' => BLOCK_NO_CACHE,
   );
 
   $blocks['site'] = array(
     'info' => t('SexyBookmarks: Site URL'),
+    'cache' => BLOCK_NO_CACHE,
   );
 
   return $blocks;
 }
 
 function sexybookmarks_block_configure($delta) {
+  if (!module_exists('ctools')) {
+    return array();
+  }
+
   $form = array();
 
   $options = array('' => '- None -');

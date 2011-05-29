@@ -9,6 +9,10 @@
  */
 function node_sexybookmarks_form_alter_alter($form, $form_state, $form_id) {
   if ($form_id == 'node_type_form') {
+    if (!module_exists('ctools')) {
+      return;
+    }
+
     $form['sexybookmarks'] = array(
       '#type' => 'fieldset',
       '#title' => t('SexyBookmarks settings'),

@@ -105,3 +105,11 @@ function sexybookmarks_update_6200() {
 
   return $ret;
 }
+
+function sexybookmarks_update_6201() {
+  $ret = array();
+
+  $ret[] = update_sql("UPDATE {blocks} SET cache = -1 WHERE module = 'sexybookmarks'");
+
+  return $ret;
+}

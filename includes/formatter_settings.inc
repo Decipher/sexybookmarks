@@ -8,6 +8,10 @@
  * Implements hook_formatter_settings_form().
  */
 function sexybookmarks_formatter_settings_form($content_type, $field_name, $formatter_name, $settings) {
+  if (!module_exists('ctools')) {
+    return array();
+  }
+
   $element = array();
 
   $options = array('' => '- None -');

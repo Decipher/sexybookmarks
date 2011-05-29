@@ -23,6 +23,10 @@ class views_handler_field_node_sexybookmarks extends views_handler_field {
   }
 
   function options_form(&$form, &$form_state) {
+    if (!module_exists('ctools')) {
+      return;
+    }
+
     $options = array();
     ctools_include('export');
     foreach (ctools_export_crud_load_all('sexybookmarks_profiles') as $profile) {

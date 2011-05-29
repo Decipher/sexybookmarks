@@ -25,6 +25,20 @@ function sexybookmarks_sexybookmarks_init() {
   );
   drupal_add_js('SHRSB_Globals = ' . drupal_to_js($globals) . ';', 'inline');
   drupal_add_js('SHRSB_Settings = {};', 'inline');
+
+  // Determine if all required modules are available after SexyBookmarks 1.x to 2.x upgrade.
+  $required = array(
+    'ctools' => l(t('Chaos tool suite'), 'http://drupal.org/project/ctools'),
+    'jquery_update' => l(t('jQuery Update'), 'http://drupal.org/project/jquery_update')
+  );
+  foreach (element_children($required) as $module) {
+    if (!module_exists($module)) {
+      module_enable(array($module));
+      if (!module_exists($module)) {
+        drupal_set_message(t("SexyBookmarks requires the !{$module} module to perform correctly, please install it immediately.", array("!{$module}" => $required[$module])), 'error');
+      }
+    }
+  }
 }
 
 /**
@@ -122,6 +136,10 @@ function theme_sexybookmarks($variables) {
  * Prepare configuration for SexyBookmarks theme callback.
  */
 function sexybookmarks_get_config(&$variables) {
+  if (!module_exists('ctools')) {
+    return NULL;
+  }
+
   $config = NULL;
 
   if (!empty($variables['profile'])) {

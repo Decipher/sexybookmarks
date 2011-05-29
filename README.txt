@@ -31,7 +31,7 @@ Features
     * Current URL.
     * Site URL.
     * plus an example Boxes block for extended support.
-  * Drupal API Theme() function.
+  * Drupal API theme() function.
 * Support for:
   * Formatter Settings module.
   * Page Title module.
@@ -72,3 +72,11 @@ Configuration
   The position of the SexyBookmarks widget can be set at:
     Administer > Content management > [content type] > Manage fields
     http://[www.yoursite.com/path/to/drupal]/admin/content/node-type/[content-type]/fields
+
+
+Help
+--------------------------------------------------------------------------------
+
+More help can be found via the Help module:
+  Administer > Help > sexybookmarks
+  http://[www.yoursite.com/path/to/drupal]/admin/help/sexybookmarks
