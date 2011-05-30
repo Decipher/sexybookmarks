@@ -172,7 +172,7 @@ function sexybookmarks_get_file($url, $destination = NULL) {
     $request = drupal_http_request($url);
     $pathinfo = pathinfo($file);
     if ($request->code == 200) {
-      if (file_prepare_directory($dir = $pathinfo['dirname'], FILE_CREATE_DIRECTORY)) {
+      if (file_prepare_directory($pathinfo['dirname'], FILE_CREATE_DIRECTORY)) {
         file_unmanaged_save_data($request->data, $file);
       }
     }
