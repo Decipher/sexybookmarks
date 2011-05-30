@@ -35,6 +35,7 @@ Features
 * Support for:
   * Formatter Settings module.
   * Page Title module.
+  * Redirecting Click Bouncer module.
   * Shorten URLs module.
 
 
@@ -50,6 +51,7 @@ Recommended Modules
 --------------------------------------------------------------------------------
 
 * Formatter Settings - http://drupal.org/project/formatter_settings
+* Redirecting Click Bouncer - http://drupal.org/project/bouncer
 * Shorten URLs - http://drupal.org/project/shorten
 
 
