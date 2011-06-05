@@ -195,8 +195,16 @@ function sexybookmarks_get_file($url, $destination = NULL) {
     $request = drupal_http_request($url);
     $pathinfo = pathinfo($file);
     if ($request->code == 200) {
+      // Stash messages to suppress file_check_directory() messages.
+      $messages = drupal_get_messages(NULL, FALSE);
+
       if (file_check_directory($dir = file_directory_path() . '/sexybookmarks', FILE_CREATE_DIRECTORY) && file_check_directory($pathinfo['dirname'], FILE_CREATE_DIRECTORY)) {
         file_save_data($request->data, $file);
+      }
+
+      // Restore messages to suppress file_check_directory() messages.
+      if (!user_access('administer sexybookmarks')) {
+        $_SESSION['messages'] = $messages;
       }
     }
 

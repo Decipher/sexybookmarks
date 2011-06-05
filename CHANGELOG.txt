@@ -1,6 +1,12 @@
 SexyBookmarks 6.x-2.x-dev, xxxx-xx-xx (development release)
 --------------------------------------------------------------------------------
 
+- #1178034: Fixed issue with file_check_directory() system messages.
+
+
+SexyBookmarks 6.x-2.0, 2011-05-30
+--------------------------------------------------------------------------------
+
 - Initial backport for Drupal 7.x-2.x branch.
 
 
