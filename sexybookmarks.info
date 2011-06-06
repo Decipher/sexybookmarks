@@ -6,6 +6,7 @@ core = 7.x
 
 files[] = includes/block.inc
 files[] = includes/ctools.inc
+files[] = includes/custom_formatters.inc
 files[] = includes/field_ui.inc
 files[] = includes/help.inc
 files[] = includes/link.inc

@@ -1,4 +1,10 @@
 SexyBookmarks 7.x-2.x-dev, xxxx-xx-xx (development release)
 --------------------------------------------------------------------------------
 
+- Added Custom Formatters example.
+
+
+SexyBookmarks 7.x-2.0, 2011-05-30
+--------------------------------------------------------------------------------
+
 - Initial 7.x release.
